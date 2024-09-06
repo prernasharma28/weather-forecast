@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+
+        .weather-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .weather-info img {
+            width: 100px;
+            height: auto;
+        }
+
+        .weather-info p {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .search-bar input,
+            .search-bar button {
+                width: 100%;
+                margin: 5px 0;
+                font-size: 1em;
+            }
+
+            .weather-info p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Current Weather</h1>
+        <div class="search-bar">
+            <input type="text" id="location-input" placeholder="Enter location...">
+            <button onclick="searchWeather()">Search</button>
+        </div>
+        <div class="weather-info">
+            <img id="weather-icon" src="" alt="Weather Icon">
+            <p id="condition">Condition: </p>
+            <p id="temp-c">Temperature (°C): </p>
+            <p id="temp-f">Temperature (°F): </p>
+            <p id="city">City: </p>
+            <p id="country">Country: </p>
+            <p id="humidity">Humidity: </p>
+            <p id="wind-speed">Wind Speed (mph): </p>
+            <p id="wind-dir">Wind Direction: </p>
+            <p id="region">Region: </p>
+        </div>
+    </div>
+
+    <script>
+        function fetchWeather(location) {
+            const apiKey = 'dc4ea67544ba469eaf364438240609';  // Replace with your actual API key
+            fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error.message);
+                        return;
+                    }
+                    document.getElementById('weather-icon').src = data.current.condition.icon;
+                    document.getElementById('condition').innerText = `Condition: ${data.current.condition.text}`;
+                    document.getElementById('temp-c').innerText = `Temperature (°C): ${data.current.temp_c}`;
+                    document.getElementById('temp-f').innerText = `Temperature (°F): ${data.current.temp_f}`;
+                    document.getElementById('city').innerText = `City: ${data.location.name}`;
+                    document.getElementById('country').innerText = `Country: ${data.location.country}`;
+                    document.getElementById('humidity').innerText = `Humidity: ${data.current.humidity}%`;
+                    document.getElementById('wind-speed').innerText = `Wind Speed (mph): ${data.current.wind_mph}`;
+                    document.getElementById('wind-dir').innerText = `Wind Direction: ${data.current.wind_dir}`;
+                    document.getElementById('region').innerText = `Region: ${data.location.region}`;
+                })
+                .catch(error => console.error('Error fetching weather data:', error));
+        }
+
+        function searchWeather() {
+            const location = document.getElementById('location-input').value.trim();
+            if (location) {
+                fetchWeather(location);
+            } else {
+                alert('Please enter a location.');
+            }
+        }
+
+        // Fetch default weather for a specific location on load
+        window.onload = function () {
+            fetchWeather('India');
+        };
+    </script>
+</body>
+
+</html>
