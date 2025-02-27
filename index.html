@@ -115,7 +115,7 @@
 
     <script>
         function fetchWeather(location) {
-            const apiKey = 'dc4ea67544ba469eaf364438240609';  // Replace with your actual API key
+            const apiKey = 'dc4ea67544ba469eaf364438240609'; 
             fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}`)
                 .then(response => response.json())
                 .then(data => {
